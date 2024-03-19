@@ -63,7 +63,7 @@ export function EmailEditor() {
             <Underline fontSize={17}/>
           </button>
         </div>
-        <button>Send now</button>
+        <button onClick={() => console.log("zxc3")}>Send now</button>
       </div>
       </div>
     </div>
