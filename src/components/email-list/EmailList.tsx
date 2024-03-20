@@ -1,6 +1,7 @@
 import { emailService } from '../../services/email.service'
 import styles from './EmailList.module.scss'
-import { useQuery } from 'react-query'
+import { useQuery } from '@tanstack/react-query'
+import parse from 'html-react-parser'
 
 export function EmailList() {
     const { data } = useQuery({
@@ -10,7 +11,7 @@ export function EmailList() {
   return (
     <div className={styles.list}>
         {data?.map(email => (
-            <div key={email.text}>{email.text}</div>
+            <div key={email.text}>{parse(email.text)}</div>
         ))}
     </div>
   )

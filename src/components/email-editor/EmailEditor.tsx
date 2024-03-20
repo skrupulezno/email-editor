@@ -3,19 +3,24 @@ import styles from './EmailEditor.module.scss'
 import { useState, useRef } from 'react'
 import { TStyle, applyStyle } from './apply-style'
 import parse from 'html-react-parser'
+import { useMutation } from '@tanstack/react-query'
+import { emailService } from '../../services/email.service'
 
 export function EmailEditor() {
-  const [text, setText] = useState(`
-  <p>Lorem ipsum dolor, sit amet consectetur adipisicing elit. 
-  Veritatis iure esse velit quibusdam eius. 
-  Recusandae quidem exercitationem aspernatur. 
-  Obcaecati aperiam necessitatibus dolores dolore numquam facere 
-  incidunt officiis neque temporibus a.</p>`)
+  const [text, setText] = useState(`you can go`)
 
   const [selectionStart, setSelectionStart] = useState(0);
   const [selectionEnd, setSelectionEnd] = useState(0);
   
   const textRef = useRef<HTMLTextAreaElement | null>(null)
+
+  const {mutate, isPending} = useMutation({
+    mutationKey: ['create email'],
+    mutationFn: () => emailService.addEmails(text),
+      onSuccess() {
+        setText('');
+      }
+  })
 
   const updateSelection = () => {
     if( !textRef.current) return
@@ -39,7 +44,7 @@ export function EmailEditor() {
   return (
     <div>
       <h1>Email editor</h1>
-      <div className={styles.preview}>{parse(text)}</div>
+      {text && <div className={styles.preview}>{parse(text)}</div>}
       <div className={styles.card}>
         <textarea 
           ref={textRef}
@@ -63,7 +68,7 @@ export function EmailEditor() {
             <Underline fontSize={17}/>
           </button>
         </div>
-        <button onClick={() => console.log("zxc3")}>Send now</button>
+        <button disabled={isPending} onClick={() => text ? mutate(): alert("you cant send clear messages")}>Send now</button>
       </div>
       </div>
     </div>
