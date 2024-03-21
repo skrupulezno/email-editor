@@ -1,11 +1,9 @@
 import { Bold, Eraser, Italic, Underline } from 'lucide-react'
 import styles from './EmailEditor.module.scss'
-import { useState, useRef } from 'react'
-import { TStyle, applyStyle } from './apply-style'
-import parse from 'html-react-parser'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { emailService } from '../../services/email.service'
 import { useEditor } from './useEditor'
+import MarkdownPreview from '@uiw/react-markdown-preview';
 
 export function EmailEditor() {
   const {applyFormat, text, setText, updateSelection, textRef } = useEditor()
@@ -16,7 +14,7 @@ export function EmailEditor() {
     mutationKey: ['create email'],
     mutationFn: () => emailService.addEmails(text),
       onSuccess() {
-        setText(''),
+        setText(``),
         queryClient.refetchQueries({ queryKey: ['email list']})
       },
   })
@@ -24,9 +22,10 @@ export function EmailEditor() {
   return (
     <div>
       <h1>md editor</h1>
-      {text && <div className={styles.preview}>{parse(text)}</div>}
+      {text && <MarkdownPreview source={text} className={styles.preview} />}
       <div className={styles.card}>
         <textarea 
+          wrap='off'
           ref={textRef}
           className={styles.editor} 
           spellCheck='false'

@@ -6,13 +6,13 @@ export const  applyStyle= (type: TStyle, selectedText:string) => {
 
     switch (type) {
         case 'bold':
-            formattedText = '<b>' + selectedText + '</b>';
+            formattedText = '**' + selectedText + '**';
             break;
         case 'italic':
-            formattedText = '<i>' + selectedText + '</i>';
+            formattedText = '*' + selectedText + '*';
             break;
         case 'underline':
-            formattedText = '<u>' + selectedText + '</u>';
+            formattedText = '~~' + selectedText + '~~';
             break;
         default:
             formattedText = selectedText;

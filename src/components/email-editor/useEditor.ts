@@ -3,7 +3,7 @@ import { applyStyle, TStyle } from "./apply-style";
 
 
 export function useEditor() {
-    const [text, setText] = useState(`go get'em, tiger`)
+    const [text, setText] = useState(`start`)
 
     const [selectionStart, setSelectionStart] = useState(0);
     const [selectionEnd, setSelectionEnd] = useState(0);
