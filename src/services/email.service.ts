@@ -9,9 +9,14 @@ class EmailService {
         const { data } = await axios.get<IEmail[]>(this.URL)
         return data
     }
-    async addEmails(text: string){
+    async addEmails(name: string, task: string, doctor: string, cab: string, date: string, priority: string){
         const { data } = await axios.post(this.URL, {
-             text,
+             task,
+             name,
+             doctor,
+             cab,
+             date,
+             priority
         })
         return data
     }

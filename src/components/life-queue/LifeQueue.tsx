@@ -1,9 +1,9 @@
-import styles from './EmailEditor.module.scss'
+import styles from './LifeQueue.module.scss'
 import { useState } from 'react'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { emailService } from '../../services/email.service'
 
-export function EmailEditor() {
+export function LifeQueue() {
   const queryClient = useQueryClient()
   const [task, setTask] = useState('');
   const [name, setName] = useState('');
@@ -24,7 +24,7 @@ export function EmailEditor() {
 
   const {mutate, isPending} = useMutation({
     mutationKey: ['create email'],
-    mutationFn: () => emailService.addEmails(name, task, doctor, cab, formatDateTime(date),"1"),
+    mutationFn: () => emailService.addEmails(name, task, doctor, cab, formatDateTime(date), "0"),
     onSuccess() {
       setName('');
       setDoctor('');
@@ -37,7 +37,7 @@ export function EmailEditor() {
 
   return (
     <div>
-      <h2>Запись</h2>
+      <h2>Живая очередь</h2>
       <div className={styles.card}>
         <div className={styles.form}>
         <label className='label'>

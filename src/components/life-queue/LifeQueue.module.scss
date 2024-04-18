@@ -1,0 +1,77 @@
+.preview {
+    margin-bottom: 1.5rem;
+    border: 1px solid #bdd174;
+    padding: 0.5rem;
+    border-radius: 10px;
+  }
+  
+  .card {
+    background-color: rgba(0, 0, 0, 0.4);
+    border-radius: 10px;
+    overflow: hidden;
+    border: 1px solid #2e2e2e;
+    max-width: 300px;
+    display: flex;
+    flex-direction: column;
+    
+    .form {
+      display: flex;
+      align-items: center;
+      flex-direction: column;
+      justify-content: center;
+      gap: 20px;
+      padding: 20px;
+  
+      >label {
+        gap: 20px;
+      }
+    }
+  
+    .actions {
+      background-color: rgba(34, 150, 102, 0.021);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 0.3rem 1.2rem;
+  
+      .tools {
+        >button {
+          margin-right: .4rem;
+          background-color: transparent;
+          border: none;
+          cursor: pointer;
+          transition: color 0.4s ease-in-out;
+  
+          &:hover {
+            color: burlywood;
+          }
+        }
+      }
+  
+      >button {
+        border-radius: 8px;
+        border: 1px solid transparent;
+        padding: 0.6em 1.2em;
+        width: 180px;
+        font-size: 1em;
+        font-weight: 500;
+        font-family: inherit;
+        background-color: #3c6b65;
+        cursor: pointer;
+        transition: border-color 0.4s;
+        &:hover {
+          border-color: #36ff03;
+        }
+  
+        &:focus,
+        &:focus-visible {
+          outline: 4px auto -webkit-focus-ring-color;
+        }
+      }
+    }
+  }
+  
+  
+  .read-the-docs {
+    color: #888;
+  }
