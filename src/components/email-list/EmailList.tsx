@@ -3,7 +3,6 @@ import { emailService } from '../../services/email.service'
 import styles from './EmailList.module.scss'
 import { useQuery } from '@tanstack/react-query'
 import parse from 'html-react-parser'
-import { Slice } from 'lucide-react'
 
 export function EmailList() {
   interface Entry {
@@ -22,14 +21,13 @@ export function EmailList() {
   });
 
   const [disappearTimes, setDisappearTimes] = useState<Record<string, Date>>({});
-  const [activeCount, setActiveCount] = useState(0); 
 
   useEffect(() => {
     if (data) {
       const newDisappearTimes: Record<string, Date> = {};
       data.forEach(email => {
         const emailDateTime = new Date(email.date);
-        const disappearTime = new Date(emailDateTime.getTime() + 10 * 60000);
+        const disappearTime = new Date(emailDateTime.getTime() + 10 * 60000); // +10 минут
         newDisappearTimes[email.name] = disappearTime;
       });
       setDisappearTimes(newDisappearTimes);
@@ -41,7 +39,7 @@ export function EmailList() {
       const currentTime = new Date();
       const updatedDisappearTimes: Record<string, Date> = { ...disappearTimes };
       Object.keys(disappearTimes).forEach(key => {
-        if (currentTime >= disappearTimes[key]) {
+        if (currentTime > disappearTimes[key]) { // Убираем тех, кто опоздал больше 10 минут
           delete updatedDisappearTimes[key];
         }
       });
@@ -58,42 +56,35 @@ export function EmailList() {
   }
 
   const sortedData = data?.sort((a, b) => parseDate(a.date).getTime() - parseDate(b.date).getTime());
-  const activeData = sortedData?.filter(email => {
-    const emailDateTime = new Date(parseDate(email.date));
-    return new Date() < emailDateTime;
-  }) || [];
-
-  useEffect(() => {
-    setActiveCount(activeData.length);
-  }, [activeData]);
-
+  const activeData = sortedData?.filter(email => disappearTimes.hasOwnProperty(email.name)) || [];
+  let visibleCount = 0;
   return (
     <div className={styles.list}>
-      <h2>Очередь ({activeCount} активных)</h2>
+      <h2>Очередь ({activeData.length} активных)</h2>
       {activeData.map((email, index) => {
         const emailDateTime = new Date(parseDate(email.date));
         const currentTime = new Date();
-        const isPast = currentTime >= emailDateTime;
-        const shouldDisappear = !disappearTimes.hasOwnProperty(email.name);
-
-        return (
-          !shouldDisappear && (
-            <div key={email.id} style={{
-              border: isPast ? '1px solid red' : '1px solid inherit',
-              color: email.priority === "1" ? 'orange' : 'none'
-            }}>
-              Номер: {index + 1}
-              <h4>Цель визита: {parse(email.task)}</h4>
-              Пациент: {parse(email.name)}
-              <div></div>
-              Врач: {parse(email.doctor)}
-              <div></div>
-              Дата: {parse(email.date)}
-              <div></div>
-              Кабинет: {parse(email.cab)}
-            </div>
-          )
-        );
+        const timeDiff = (currentTime.getTime() - emailDateTime.getTime()) / 60000;
+        const isExactlyLate = timeDiff >= 0 && timeDiff <= 10; 
+        if (!isExactlyLate && timeDiff < 10) {
+          visibleCount++; 
+        }
+        return (timeDiff < 10 && (
+           <div key={email.id} style={{
+            border: isExactlyLate ? '1px solid red' : '1px solid inherit',
+            color: email.priority === "1" ? 'orange' : 'none'
+          }}>
+            Номер: {visibleCount}
+            <h4>Цель визита: {parse(email.task)}</h4>
+            Пациент: {parse(email.name)}
+            <div></div>
+            Врач: {parse(email.doctor)}
+            <div></div>
+            Дата: {parse(email.date)}
+            <div></div>
+            Кабинет: {parse(email.cab)}
+          </div>
+        ));
       })}
     </div>
   );
